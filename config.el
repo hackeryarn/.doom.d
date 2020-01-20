@@ -7,7 +7,7 @@
 ;; These are used for a number of things, particularly for GPG configuration,
 ;; some email clients, file templates and snippets.
 (setq user-full-name "Artem Chernyak"
-      user-mail-address "john@doe.com")
+      user-mail-address "artemchernyak@gmail.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -23,7 +23,10 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. These are the defaults.
-(setq doom-theme 'doom-solarized-dark)
+(if (string-equal "hackeryarn" (user-login-name))
+    (setq doom-theme 'doom-solarized-dark)
+  (setq doom-theme 'doom-solarized-light))
+
 (setq evil-escape-key-sequence "fd")
 ;; If you intend to use org, it is recommended you change this!
 (setq org-directory "~/org/")
