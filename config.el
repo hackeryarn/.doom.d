@@ -29,7 +29,7 @@
 
 (setq evil-escape-key-sequence "fd")
 ;; If you intend to use org, it is recommended you change this!
-(setq org-directory "~/org/")
+(setq org-directory "~/Sync/org")
 
 ;; If you want to change the style of line numbers, change this to `relative' or
 ;; `nil' to disable it:
@@ -51,3 +51,11 @@
 ;;
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
+
+(after! cider
+  (cider-register-cljs-repl-type
+   'bro
+   "(do (user/run)
+        (user/browser-repl))"))
+
+(setq-hook! python-mode python-indent-offset 4)
