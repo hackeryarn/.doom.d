@@ -27,7 +27,6 @@
     (setq doom-theme 'doom-solarized-dark)
   (setq doom-theme 'doom-solarized-light))
 
-(setq evil-escape-key-sequence "fd")
 ;; If you intend to use org, it is recommended you change this!
 (setq org-directory "~/Sync/org")
 
@@ -51,6 +50,11 @@
 ;;
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
+
+(setq doom-localleader-key ",")
+
+(after! evil
+  (setq evil-escape-key-sequence "fd"))
 
 (after! cider
   (cider-register-cljs-repl-type
