@@ -62,4 +62,5 @@
    "(do (user/run)
         (user/browser-repl))"))
 
-(setq-hook! python-mode python-indent-offset 4)
+(after! python-mode
+  (setq-hook! python-mode python-indent-offset 4))
