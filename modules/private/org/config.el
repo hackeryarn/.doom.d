@@ -5,15 +5,20 @@
 
   ;; Refile
   (setq org-outline-path-complete-in-steps nil)
-  (setq org-refile-targets '(("~/Sync/gtd/todo.org" :level . 1)
-                             ("~/Sync/gtd/work.org" :level . 1)))
+  (setq org-refile-allow-creating-parent-nodes 'confirm)
+  (setq org-refile-use-outline-path 'file)
+  (setq org-refile-targets `(("~/Sync/gtd/todo.org" :level . 1)
+                             ("~/Sync/gtd/work.org" :level . 1)
+                             (,(directory-files "~/Sync/para/projects" 'full) :level . 1)
+                             (,(directory-files "~/Sync/para/areas" 'full) :level . 1)
+                             (,(directory-files "~/Sync/para/resources" 'full) :level . 1)))
 
   ;; Timer setup
   (add-to-list 'org-modules 'org-timer)
   (setq org-timer-default-timer 25)
   (add-hook 'org-clock-in-hook (lambda ()
-      (if (not org-timer-current-timer)
-      (org-timer-set-timer '(16)))))
+                                 (if (not org-timer-current-timer)
+                                     (org-timer-set-timer '(16)))))
 
   (setq org-plantuml-jar-path
         (expand-file-name "~/.doom.d/scripts/plantuml.jar"))
@@ -46,15 +51,15 @@
 
   (defun create-home-task-list ()
     '((todo "TODO"
-        ((org-agenda-overriding-header "Todo")
-            (org-agenda-todo-ignore-deadlines 'all)
-            (org-agenda-todo-ignore-scheduled 'all)
-            (org-agenda-files '("~/Sync/gtd/todo.org"))))
+            ((org-agenda-overriding-header "Todo")
+             (org-agenda-todo-ignore-deadlines 'all)
+             (org-agenda-todo-ignore-scheduled 'all)
+             (org-agenda-files '("~/Sync/gtd/todo.org"))))
       (todo "WAITING"
-        ((org-agenda-overriding-header "Waiting")
-            (org-agenda-todo-ignore-deadlines 'all)
-            (org-agenda-todo-ignore-scheduled 'all)
-            (org-agenda-files '("~/Sync/gtd/todo.org"))))))
+            ((org-agenda-overriding-header "Waiting")
+             (org-agenda-todo-ignore-deadlines 'all)
+             (org-agenda-todo-ignore-scheduled 'all)
+             (org-agenda-files '("~/Sync/gtd/todo.org"))))))
 
   (defun create-work-agenda-custom-command (span)
     (list
@@ -65,22 +70,22 @@
 
   (defun create-work-task-list ()
     '((todo "TODO"
-        ((org-agenda-overriding-header "Todo")
-            (org-agenda-todo-ignore-deadlines 'all)
-            (org-agenda-todo-ignore-scheduled 'all)
-            (org-agenda-files '("~/Sync/gtd/work.org"))))
+            ((org-agenda-overriding-header "Todo")
+             (org-agenda-todo-ignore-deadlines 'all)
+             (org-agenda-todo-ignore-scheduled 'all)
+             (org-agenda-files '("~/Sync/gtd/work.org"))))
       (todo "WAITING"
-        ((org-agenda-overriding-header "Waiting")
-            (org-agenda-todo-ignore-deadlines 'all)
-            (org-agenda-todo-ignore-scheduled 'all)
-            (org-agenda-files '("~/Sync/gtd/work.org"))))))
+            ((org-agenda-overriding-header "Waiting")
+             (org-agenda-todo-ignore-deadlines 'all)
+             (org-agenda-todo-ignore-scheduled 'all)
+             (org-agenda-files '("~/Sync/gtd/work.org"))))))
 
   (defun create-daily-home-agenda-custom-command ()
-        (list "h" "Home" (append (create-home-agenda-custom-command 3)
-                                  (create-home-task-list))))
+    (list "h" "Home" (append (create-home-agenda-custom-command 3)
+                             (create-home-task-list))))
   (defun create-daily-work-agenda-custom-command ()
-        (list "w" "Work" (append (create-work-agenda-custom-command 3)
-                                  (create-work-task-list))))
+    (list "w" "Work" (append (create-work-agenda-custom-command 3)
+                             (create-work-task-list))))
 
   (defun create-org-agenda-custom-commands ()
     (list (create-daily-home-agenda-custom-command)
@@ -127,11 +132,11 @@
       "* Wins\n- %?\n* Struggles\n- \n* Ball Drops\n- "))
 
   (setq org-capture-templates
-	(list (org-template-todo)
-	      (org-template-journal)
-	      (org-template-week)
-	      (org-template-month)
-	      (org-template-task)))
+        (list (org-template-todo)
+              (org-template-journal)
+              (org-template-week)
+              (org-template-month)
+              (org-template-task)))
 
   (defun +org/get-day (post)
     "Gets the day number from the post"
@@ -162,26 +167,26 @@
     (with-temp-buffer
       (insert-file-contents post)
       (let (p1 p2)
-	(setq p1 (point))
-	(search-forward "---")
-	(+org/increment-day)
-	(+org/update-date)
-	(search-forward "---")
-	(setq p2 (point))
-	(buffer-substring-no-properties p1 p2))))
+        (setq p1 (point))
+        (search-forward "---")
+        (+org/increment-day)
+        (+org/update-date)
+        (search-forward "---")
+        (setq p2 (point))
+        (buffer-substring-no-properties p1 p2))))
 
   (defun +org/new-post ()
     "Creates a new post for daily reading notes"
     (interactive)
     (let* ((old-post-name (buffer-name (current-buffer)))
-	   (new-post-name (+org/next-post-name old-post-name))
-	   (metadata (+org/update-metadata old-post-name)))
+           (new-post-name (+org/next-post-name old-post-name))
+           (metadata (+org/update-metadata old-post-name)))
       (with-temp-file new-post-name
-	(insert metadata))
+        (insert metadata))
       (find-file new-post-name)
       (kill-buffer old-post-name)))
   
   (map! :leader
-      (:prefix "o"
-        :desc "Org agenda" :n "a" #'org-agenda
-        :desc "Org capture" :n "c" #'org-capture)))
+        (:prefix "o"
+          :desc "Org agenda" :n "a" #'org-agenda
+          :desc "Org capture" :n "c" #'org-capture)))
