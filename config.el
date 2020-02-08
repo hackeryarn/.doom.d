@@ -62,5 +62,5 @@
    "(do (user/run)
         (user/browser-repl))"))
 
-(after! python-mode
-  (setq-hook! python-mode python-indent-offset 4))
+(after! parinfer
+  (add-hook! (racket-mode hy-mode) #'parinfer-mode))
