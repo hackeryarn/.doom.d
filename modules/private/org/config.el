@@ -1,6 +1,14 @@
 ;;; private/org/config.el -*- lexical-binding: t; -*-
 
+(after! deft
+  (setq deft-directory "~/Sync/para")
+  (setq deft-recursive t))
+
+(after! org-journal
+  (setq org-journal-file-type 'weekly))
+
 (after! org
+  (setq org-directory "~/Sync/org")
   (advice-add 'org-agenda-quit :before 'org-save-all-org-buffers)
 
   ;; Refile
@@ -111,16 +119,6 @@
       (file "~/Sync/gtd/inbox.org")
       "* TODO %i%?"))
 
-  (defun org-template-journal ()
-    '("j" "Journal" entry
-      (file+olp+datetree "~/Sync/org/journal.org")
-      "* %?" :tree-type week))
-  
-  (defun org-template-task ()
-    '("t" "Task Journal" entry
-      (file+olp+datetree "~/Sync/org/task-journal.org")
-      "* %U\n%i%?" :tree-type week))
-
   (defun org-template-week ()
     '("w" "Weekly Review" entry
       (file+olp+datetree "~/Sync/org/weekly-review.org")
@@ -133,7 +131,6 @@
 
   (setq org-capture-templates
         (list (org-template-todo)
-              (org-template-journal)
               (org-template-week)
               (org-template-month)
               (org-template-task)))
