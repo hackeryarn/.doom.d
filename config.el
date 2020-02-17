@@ -64,3 +64,6 @@
 
 (after! parinfer
   (add-hook! (racket-mode hy-mode) #'parinfer-mode))
+
+(after! racket-mode
+  (remove-hook! racket-mode #'racket-smart-open-bracket-mode))

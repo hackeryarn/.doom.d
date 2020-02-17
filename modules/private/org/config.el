@@ -132,8 +132,7 @@
   (setq org-capture-templates
         (list (org-template-todo)
               (org-template-week)
-              (org-template-month)
-              (org-template-task)))
+              (org-template-month)))
 
   (defun +org/get-day (post)
     "Gets the day number from the post"
